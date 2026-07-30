@@ -97,7 +97,7 @@ def get_task(task_id: int):
 @app.post("/tasks",
           status_code=201,
           summary="Create a new task",
-          description="Creates a new task.")
+          description="Creates a new task in the SQLite database.")
 def create_task(task: TaskCreate):
 
     if task.title.strip()=="":
@@ -106,16 +106,23 @@ def create_task(task: TaskCreate):
             detail="Title cannot be empty"
         )
 
-    new_id = max([task["id"] for task in tasks], default=0) + 1
+    cursor.execute(
+        """
+            INSERT INTO tasks(title, done)
+            VALUES (?, ?)
+        """,
+        (task.title,0)
+    )
 
-    new_task={
-        "id": new_id,
-        "title": task.title,
+    connection.commit()
+
+    task_id = cursor.lastrowid
+
+    return {
+        "id":task_id,
+        "title":task.title,
         "done":False
     }
-    tasks.append(new_task)
-
-    return new_task
 
 @app.put("/tasks/{task_id}",
          summary="Update a task",
