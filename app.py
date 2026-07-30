@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-import database
+from database import cursor, connection
 
 app=FastAPI(
     title="Task Management API",
@@ -17,24 +17,6 @@ Data is stored in memory.
     """,
     version="1.0.0"
 )
-
-tasks=[
-    {
-        "id":1,
-        "title":"Complete assignment",
-        "done":False
-    },
-    {
-        "id":2,
-        "title":"Go to gym",
-        "done":True
-    },
-    {
-        "id":3,
-        "title":"Practice DSA",
-        "done":False
-    }
-]
 
 class TaskCreate(BaseModel):
     title: str=Field(
@@ -75,22 +57,42 @@ def health():
 
 @app.get("/tasks",
          summary="Get all tasks",
-         description="Returns the complete list of tasks stored in memory.")
+         description="Returns all tasks from the SQLite database")
 def get_tasks():
+    cursor.execute("SELECT * FROM tasks")
+    rows=cursor.fetchall()
+    tasks=[]
+
+    for row in rows:
+        tasks.append({
+            "id":row[0],
+            "title":row[1],
+            "done":bool(row[2])
+        })
     return tasks
 
 @app.get("/tasks/{task_id}",
          summary="Get task by ID",
-         description="Returns a task using its ID.")
+         description="Returns a single task from the SQLite Database.")
 def get_task(task_id: int):
-    for task in tasks:
-        if task["id"]==task_id:
-            return task
-
-    raise HTTPException(
-        status_code=404,
-        detail=f"Task {task_id} not found"
+    cursor.execute(
+        "SELECT * FROM tasks WHERE id = ?",
+        (task_id,)
     )
+
+    row=cursor.fetchone()
+
+    if row is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Task {task_id} not found"
+        )
+
+    return {
+        "id":row[0],
+        "title":row[1],
+        "done":bool(row[2])
+    }
 
 @app.post("/tasks",
           status_code=201,
