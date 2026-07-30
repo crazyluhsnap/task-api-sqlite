@@ -126,7 +126,8 @@ def create_task(task: TaskCreate):
 
 @app.put("/tasks/{task_id}",
          summary="Update a task",
-         description="Updates an existing task.")
+         description="Updates an existing task in the SQLite database."
+         )
 def update_task(task_id: int, updated_task: TaskUpdate):
 
     if(updated_task.title.strip()==""):
@@ -135,31 +136,48 @@ def update_task(task_id: int, updated_task: TaskUpdate):
             detail="Title cannot be empty"
         )
 
-    for task in tasks:
+    cursor.execute(
+        """
+            UPDATE tasks
+            SET title = ?, done = ?
+            WHERE id = ?
+        """,
+        (
+            updated_task.title,
+            int(updated_task.done),
+            task_id
+        )
+    )
 
-        if task["id"]==task_id:
-            task["title"]=updated_task.title
-            task["done"]=updated_task.done
+    connection.commit()
 
-            return task
-
-    raise HTTPException(
+    if cursor.rowcount==0:
+        raise HTTPException(
             status_code=404,
             detail=f"Task {task_id} not found"
         )
 
+    return {
+        "id":task_id,
+        "title":updated_task.title,
+        "done": updated_task.done
+    }
+
 @app.delete("/tasks/{task_id}",
             status_code=204, 
             summary="Delete a task",
-            description="Deletes a task.")
+            description="Deletes a task from the SQLite database.")
 def delete_task(task_id: int):
 
-    for index, task in enumerate(tasks):
-        if task["id"]==task_id:
-            tasks.pop(index)
-            return
-
-    raise HTTPException(
-        status_code=404,
-        detail=f"Task {task_id} not found"
+    cursor.execute(
+        "DELETE FROM tasks WHERE id=?",
+        (task_id,)
     )
+
+    connection.commit()
+
+    if cursor.rowcount==0:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Task {task_id} not found"
+        )
