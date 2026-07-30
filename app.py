@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+import database
 
 app=FastAPI(
     title="Task Management API",
@@ -103,8 +104,10 @@ def create_task(task: TaskCreate):
             detail="Title cannot be empty"
         )
 
+    new_id = max([task["id"] for task in tasks], default=0) + 1
+
     new_task={
-        "id": len(tasks)+1,
+        "id": new_id,
         "title": task.title,
         "done":False
     }
