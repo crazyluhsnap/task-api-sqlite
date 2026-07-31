@@ -95,15 +95,8 @@ http://127.0.0.1:8000/docs
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | / | API Information |
-| GET | /health | Health Check |
-| GET | /tasks | Get all tasks |
-| GET | /tasks/{id} | Get task by ID |
-| POST | /tasks | Create a task |
-| PUT | /tasks/{id} | Update a task |
-| DELETE | /tasks/{id} | Delete a task |
+<img width="1285" height="454" alt="image" src="https://github.com/user-attachments/assets/0eea28a1-b694-4569-8a4e-7fa6ea372210" />
+
 
 ---
 
@@ -115,11 +108,8 @@ A local database file named `tasks.db` is automatically created when the applica
 
 The database contains a single table:
 
-| Column | Type |
-|---------|------|
-| id | INTEGER PRIMARY KEY AUTOINCREMENT |
-| title | TEXT |
-| done | INTEGER (0 = False, 1 = True) |
+<img width="608" height="518" alt="image" src="https://github.com/user-attachments/assets/eafa4b04-a26b-4dbf-8cb8-75ca31e0f42c" />
+
 
 On the first run, three sample tasks are automatically inserted into the database.
 
@@ -151,16 +141,21 @@ curl -X POST http://127.0.0.1:8000/tasks ^
 ```
 
 ---
-
-## Screenshots
-
-### Swagger UI
-
-(Add Swagger Screenshot)
-
 ### SQLite Database
 
-(Add DB Browser Screenshot)
+<img width="1038" height="658" alt="image" src="https://github.com/user-attachments/assets/1c1923da-384f-458e-8cb0-4182754cc7e2" />
+
+<img width="1038" height="662" alt="image" src="https://github.com/user-attachments/assets/b8b3f662-b4d3-4eb6-854b-bde42907d38d" />
+
+<img width="1030" height="655" alt="image" src="https://github.com/user-attachments/assets/6fd55e27-1329-445b-be8d-1893cda195ad" />
+
+<img width="1038" height="654" alt="image" src="https://github.com/user-attachments/assets/2c0fcfea-308c-4ca5-81a0-14dd722b5f01" />
+
+<img width="1037" height="655" alt="image" src="https://github.com/user-attachments/assets/38e7442b-2d7f-4d1c-ad46-e23f5b1e64da" />
+
+<img width="1033" height="658" alt="image" src="https://github.com/user-attachments/assets/7b77657a-edf5-48a1-8c65-16a2ce975799" />
+
+
 
 ---
 
