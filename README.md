@@ -2,7 +2,7 @@
 
 A RESTful CRUD API built using **FastAPI** and **SQLite** for managing tasks.
 
-This project is part of the FlyRank Backend Internship (Week 3 Assignment) and demonstrates how to connect a FastAPI CRUD application to a SQLite database. Unlike the previous in-memory implementation, task data is now stored persistently and survives server restarts.
+This project demonstrates CRUD operations backed by a SQLite database, replacing the earlier in-memory implementation with persistent storage. It includes automatic database initialization, seeded sample data, and interactive API documentation through Swagger UI.
 
 ---
 
